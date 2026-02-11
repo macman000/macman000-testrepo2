@@ -1,2 +1,2 @@
 text = input("whatisthisfilecalled? >")
-print(text)
+print(text + ".py")
