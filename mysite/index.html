@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Matrix Rain</title>
+    <style>
+        /* Make the canvas fill the entire screen */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden; /* Hide scrollbars */
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size to full window
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Characters to use: Katakana, Latin, and Numbers
+        const characters = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const charArray = characters.split('');
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize; // Number of vertical columns
+
+        // Track the y-position of each drop per column
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1; 
+        }
+
+        function draw() {
+            // Draw a translucent black rectangle to create the "fading" trail
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0'; // Neon green
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                // Pick a random character
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                
+                // Draw the character
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Reset drop to the top once it hits the bottom (with some randomness)
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        // Run the animation at ~33 frames per second
+        setInterval(draw, 30);
+
+        // Adjust canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
